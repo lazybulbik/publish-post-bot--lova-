@@ -100,11 +100,15 @@ async def time(msg: Message, state: FSMContext):
     await user_data['ask_msg'].delete()
 
     if utils.validate_time(msg.text):
+        if msg.text.split(':')[0] == '0':
+            time_value = f'00:{msg.text.split(":")[1]}'
+        else:
+            time_value = msg.text
         new_write = {
             'text': user_data['text'],
             'media': user_data['media'],
             'type': user_data['type'],
-            'time': msg.text,
+            'time': time_value,
             'ent': str(user_data['ent'])
         }
         db.new_write(new_write, 'posts')

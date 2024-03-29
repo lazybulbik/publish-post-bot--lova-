@@ -34,7 +34,7 @@ async def connect(msg: types.Message):
 
     db.new_write({'id': msg.chat.id, 'name': msg.chat.full_name}, 'channels')
 
-    await bot.send_message(ADMIN_ID, f'✅ Канал *{msg.chat.full_name}* успешно подключен', parse_mode='MARKDOWN')
+    await bot.send_message(ADMIN_ID[1], f'✅ Канал *{msg.chat.full_name}* успешно подключен', parse_mode='MARKDOWN')
 
 @dp.message(Command('connect'))
 async def connect(msg: types.Message):
@@ -45,7 +45,7 @@ async def connect(msg: types.Message):
 
     db.new_write({'id': msg.chat.id, 'name': msg.chat.full_name}, 'channels')
 
-    await bot.send_message(ADMIN_ID, f'✅ Чат *{msg.chat.full_name}* успешно подключен', parse_mode='MARKDOWN')
+    await bot.send_message(ADMIN_ID[1], f'✅ Чат *{msg.chat.full_name}* успешно подключен', parse_mode='MARKDOWN')
 
 @dp.message(StateFilter('edit'))
 async def edit(msg: Message, state: FSMContext):
@@ -56,9 +56,13 @@ async def edit(msg: Message, state: FSMContext):
     await msg.delete()
 
     if utils.validate_time(msg.text):
-        db.update_data({'time': msg.text}, filters={'id': post_id}, table='posts')
+        if msg.text.split(':')[0] == '0':
+            time_value = f'00:{msg.text.split(":")[1]}'
+        else:
+            time_value = msg.text
+        db.update_data({'time': time_value}, filters={'id': post_id}, table='posts')
 
-        use_msg = await msg.answer(f'Меню взаимодействвия с постом \n\n*Время публикации: {msg.text}*', reply_markup=menu.get_post_view_menu(post_id), parse_mode='MARKDOWN')
+        use_msg = await msg.answer(f'Меню взаимодействвия с постом \n\n*Время публикации: {time_value}*', reply_markup=menu.get_post_view_menu(post_id), parse_mode='MARKDOWN')
         await state.update_data(use_msg=use_msg)
 
         await state.set_state(None)

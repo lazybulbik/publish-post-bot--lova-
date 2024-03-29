@@ -5,7 +5,7 @@ def get_moscow_time():
     utc_now = datetime.now(timezone.utc)
 
     # Создаем смещение для Московского времени (+3 часа с учетом летнего/зимнего времени)
-    moscow_offset = timedelta(hours=3)
+    moscow_offset = timedelta(hours=6)
 
     # Преобразуем время из UTC во время в Москве
     moscow_time = utc_now + moscow_offset
@@ -40,3 +40,6 @@ def validate_time(time):
         return True
     except ValueError:
         return False
+
+
+print(get_moscow_time())

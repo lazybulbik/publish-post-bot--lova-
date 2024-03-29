@@ -44,5 +44,6 @@ async def loop():
 
                     elif type == 'video':
                         await bot.send_video(chanel_id, post['media'], caption=post['text'], caption_entities=eval(post['ent']))
+                        print('post_video')
 
         await asyncio.sleep(60)
